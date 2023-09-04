@@ -4,13 +4,12 @@ const postSchema = new Schema({
   
   creator: {
     type: Schema.Types.ObjectId,
-    ref: 'User' // refrence to the user
+    ref: 'registereduser' // refrence to the user
   },
   
   thought: {
     type: String,
     required: [true, "Post is required"],
-    
   },
 
   tag: {

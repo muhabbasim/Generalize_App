@@ -6,6 +6,11 @@ const nextConfig = {
   },
   images: {
     domains: ['lh3.googleusercontent.com'],
+    remotePatterns: [
+      {
+        hostname: 'cdn.pixabay.com', 
+      },
+    ],
   },
   webpack(config) {
     config.experiments = {

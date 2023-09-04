@@ -6,6 +6,7 @@ const userSchema = new Schema({
     required: [true, 'Username is required!'],
     match: [/^(?=.{4,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/, "Username invalid, it should contain 4-20 alphanumeric letters and be unique!"]
   },
+
   email: {
     type: String,
     required: [true, "Please enter a email"],
@@ -18,8 +19,15 @@ const userSchema = new Schema({
     ]
   },
 
+  password: {
+    type: String,
+    unique: false,
+  },
+
   image: {
     type: String,
+    default: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
+    required: false,
   }
 
 }, {

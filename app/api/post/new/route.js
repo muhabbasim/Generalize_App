@@ -4,7 +4,7 @@ import { connectToDB } from "@utils/databas";
 export const POST = async (req, res) => {
 
   const { tag, thought, userId } = await req.json();
-
+  console.log(userId, tag, thought)
   try {
 
     await connectToDB();
@@ -17,7 +17,8 @@ export const POST = async (req, res) => {
     await newPost.save();
     return new Response(JSON.stringify(newPost), { status: 200 });
   } catch (error) {
-    return new Response("Failed to create a new prompt", { status: 500 });
+    // return new Response("Failed to create a new prompt", { status: 500 });
+    
   }
 
 

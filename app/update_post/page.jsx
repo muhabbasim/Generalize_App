@@ -2,7 +2,7 @@
 
 import Form from "@components/Form"
 import { useSession } from "next-auth/react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { redirect, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react"
 
 function EditPost() {
@@ -10,6 +10,12 @@ function EditPost() {
   const searchParams = useSearchParams()
   const postId = searchParams.get('id')
 
+  const { data: session } = useSession({
+    required: true,
+    onUnauthenticated(){
+      redirect('/login?callbackUrl=/update_post')
+    }
+  });
 
   const [submitting, setsSubmitting] = useState(false)
   const [post, setPost] = useState({

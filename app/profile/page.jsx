@@ -2,25 +2,32 @@
 
 import Profile from "@components/Profile"
 import { useSession } from "next-auth/react"
-import { useRouter } from "next/navigation";
+import { useRouter, redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 
 function page() {
   const router = useRouter()
-  const { data: session } = useSession();
-  const [posts, setPosts] = useState([])
+  const { data: session } = useSession({
+    required: true,
+    onUnauthenticated(){
+      redirect('/login?callbackUrl=/profile')
+    }
+  });
+  const userId = session?.user.id
+
+  const [myPosts, setMyPosts] = useState([])
 
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const response = await fetch(`/api/users/${session?.user.id}/posts`)
+      const response = await fetch(`/api/users/${userId}/posts`)
       const data = await response.json()
 
-      setPosts(data);
+      setMyPosts(data);
     }
 
-    if(session?.user.id) fetchPosts();
-  }, [])
+    if(userId) fetchPosts();
+  }, [userId])
 
   // Edit function
   const handleEdit = async (post) => {
@@ -38,8 +45,8 @@ function page() {
           method: 'DELETE',
         })
         
-        const filteredPost = posts.filter((p) => post._id !== p._id )
-        setPosts(filteredPost)
+        const filteredPost = myPosts.filter((p) => post._id !== p._id )
+        setMyPosts(filteredPost)
   
       } catch (error) {
         console.log(error);
@@ -53,7 +60,7 @@ function page() {
     <Profile
       name="My"
       desc="Welcome to your profile page"
-      data={posts}
+      data={myPosts}
       handleEdit={handleEdit}
       handleDelete={handleDelete}
     />

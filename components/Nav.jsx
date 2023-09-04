@@ -2,24 +2,15 @@
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
-import { signIn, signOut, useSession, getProviders } from "next-auth/react";
+import { useState } from 'react'
+import { signOut, useSession } from "next-auth/react";
+import { useRouter } from 'next/navigation'
 
 
 function Nav() {
-
+  const router = useRouter();
   const { data: session } = useSession()
-  const [ providers, setProviders ] = useState(null);
   const [ toggleDropDown, setToggleDropDown ] = useState(false);
-
-  useEffect(() => {
-    const setUpProviders = async () => {
-      const res = await getProviders();
-      setProviders(res);
-    }
-    setUpProviders();
-  }, [])
-
 
   return (
     <div className='flex-between w-full my-4 mb-16'>
@@ -52,22 +43,17 @@ function Nav() {
               <span>{session.user.name}</span>
             </div>
           ) : (
-           <>
-
-            {providers &&
-              Object.values(providers).map((provider) => (
-                <Link href='/sign_in' key={provider.name}>
-                  <button
-                    type='button'
-                    key={provider.name}
-                    className='gray_btn'
-                    >
-                    Sign In
-                  </button>
-                </Link>
-              ))
+            <>
+            { !session && 
+              <button
+                type='button'
+                onClick={() => router.push('/login')}
+                className='gray_btn'
+              >
+                Sign In
+              </button>
             }
-           </>
+          </>
           )
         }
       </div>
@@ -116,17 +102,14 @@ function Nav() {
             </div>
           ) : (
             <>
-              { providers && 
-                Object.values(providers).map((provider) => (
-                  <button
-                    type='button'
-                    key={provider.name}
-                    onClick={() => signIn(provider.id)}
-                    className='gray_btn'
-                  >
-                    Sign In
-                  </button>
-                ))
+              { !session && 
+                <button
+                  type='button'
+                  onClick={() => router.push('/login')}
+                  className='gray_btn'
+                >
+                  Sign In
+                </button>
               }
             </>
           )

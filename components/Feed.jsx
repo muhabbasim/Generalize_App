@@ -7,10 +7,42 @@ import PostCartList from './PostCartList'
 function Feed() {
 
   const [ posts, setPosts ] = useState('')
+  
   const [ searchText, setSearchText ] = useState('')
+  const [ searchedResult, setSearchedResult ] = useState('')
+  const [searchTimeout, setSearchTimeout] = useState(null);
 
-  const hanldeSearchChange = () => {
+  // filter function
+  const filterPosts = (textInput) => {
+    const regex = new RegExp(textInput, 'i');  // 'i' flag for case-insensitive search
 
+    return posts.filter((post) => 
+      regex.test(post.creator.name) ||
+      regex.test(post.thought) ||
+      regex.test(post.tag)
+    );
+  };
+
+  //input change handler
+  const hanldeSearchChange = (e) => {
+    clearTimeout(searchTimeout);
+    setSearchText(e.target.value);
+    
+    setSearchTimeout(
+      setTimeout(() => {
+        const results = filterPosts(searchText);
+        setSearchedResult(results)
+      }, 500)
+    )
+  }
+
+  // TagClick function
+
+  const handleTagClick = (tagName) => {
+    setSearchText(tagName);
+
+    const tagFilterResult = filterPosts(tagName)
+    setSearchedResult(tagFilterResult)
   }
 
   useEffect(() => {
@@ -31,14 +63,24 @@ function Feed() {
           value={searchText}
           onChange={hanldeSearchChange}
           required
-          className='search_input peer outline-none'
+          className='search_input peer'
         />
       </form>
 
+      {searchedResult ? (
+        <PostCartList
+          data={searchedResult}
+          handleTagClick={handleTagClick}
+        /> 
 
-      <PostCartList
-        data={posts}
-      />
+      ) : (
+          <PostCartList
+          data={posts}
+          handleTagClick={handleTagClick}
+        />
+        )
+      }
+      
     </section>
   )
 }
