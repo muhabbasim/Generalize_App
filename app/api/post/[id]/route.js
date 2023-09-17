@@ -4,6 +4,7 @@ import { connectToDB } from "@utils/databas";
 
 // Get
 export const GET = async (request, {params}) => {
+
   try {
 
     await connectToDB();

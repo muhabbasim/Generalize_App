@@ -1,10 +1,9 @@
 import Post from "@models/thought";
 import { connectToDB } from "@utils/databas";
 
-export const POST = async (req, res) => {
+export const POST = async (req) => {
 
   const { tag, thought, userId } = await req.json();
-  console.log(userId, tag, thought)
   try {
 
     await connectToDB();

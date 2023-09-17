@@ -2,6 +2,7 @@
 import { getServerSession } from 'next-auth';
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
+import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react'
 
@@ -17,7 +18,6 @@ function PostCard({ post, handleTagClick, handleEdit, handleDelete }) {
     navigator.clipboard.writeText(post.thought); // to copy the input
     setTimeout(() => setCopied(''), 3000); // delete the copy
   }
-
   const handleProfileClick = () => {
     if(post.creator._id === session?.user.id) return router.push('/profile');
     return router.push(`/profile/${post.creator._id}?name=${post.creator.name}`)
@@ -57,10 +57,12 @@ function PostCard({ post, handleTagClick, handleEdit, handleDelete }) {
 
         </div>
       </div>
-      <p 
-        className='my-4 text-sm text-gray-600 overflow-auto'>
-        {post.thought}
-      </p>
+      <Link href={`/post?id=${post._id}`}>
+        <p
+          className='truncate my-4 text-sm text-gray-600 '>
+          {post.thought}
+        </p>
+      </Link>
       <p className='font-inter text-sm text-blue-600  cursor-pointer hover:underline decoration-red-500'
         onClick={()=> handleTagClick(post.tag)}
       >

@@ -64,7 +64,6 @@ function Login() {
         </div>
 
         <form>
-      
           <input required 
             className='email-input'
             type="email" 
@@ -89,8 +88,6 @@ function Login() {
           >
             Login
           </button>
-
-         
 
           <span>You don't have an account? <Link className='--link text-black ml-3' href='/register'>Register</Link></span>
           <Link className='link' href='/'>

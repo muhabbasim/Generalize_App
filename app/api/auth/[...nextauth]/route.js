@@ -2,9 +2,8 @@ import { connectToDB } from "@utils/databas";
 import NextAuth from "next-auth/next";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import RegisterUser from "@models/users";
 import bcrypt from 'bcryptjs'; 
-import User from "@models/GAOthUser";
+import RegisterUser from "@models/users";
 
 
 const authOptions = ({

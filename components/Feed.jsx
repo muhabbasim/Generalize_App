@@ -1,16 +1,21 @@
 "use client"
 import { useEffect, useState } from 'react'
 import PostCartList from './PostCartList'
+import Pagination from './Pagination'
 
 
 
 function Feed() {
 
   const [ posts, setPosts ] = useState('')
+
+  const [ page, setPage ] = useState(1)
+  const [ totalPosts, setTotalPosts ] = useState(0)
   
   const [ searchText, setSearchText ] = useState('')
   const [ searchedResult, setSearchedResult ] = useState('')
   const [searchTimeout, setSearchTimeout] = useState(null);
+
 
   // filter function
   const filterPosts = (textInput) => {
@@ -37,7 +42,6 @@ function Feed() {
   }
 
   // TagClick function
-
   const handleTagClick = (tagName) => {
     setSearchText(tagName);
 
@@ -47,13 +51,20 @@ function Feed() {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const response = await fetch('/api/post')
-      const data = await response.json()
+      try {
+        
+        const response = await fetch(`/api/post?page=${page}`)
+        const data = await response.json()
+        setPosts(data.posts);
+        setTotalPosts(data.totalPosts)
 
-      setPosts(data);
+      } catch (error) {
+        console.log(error)
+      }
     }
+
     fetchPosts();
-  }, [])
+  }, [page])
 
   return (
     <section className='feed'>
@@ -65,6 +76,7 @@ function Feed() {
           required
           className='search_input peer'
         />
+        
       </form>
 
       {searchedResult ? (
@@ -80,7 +92,11 @@ function Feed() {
         />
         )
       }
-      
+      <Pagination 
+        page={page} 
+        totalPosts={totalPosts}
+        setPage={setPage}
+      />
     </section>
   )
 }

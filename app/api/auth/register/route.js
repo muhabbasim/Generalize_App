@@ -1,4 +1,3 @@
-import User from "@models/GAOthUser";
 import RegisterUser from "@models/users";
 import { connectToDB } from "@utils/databas"
 import bcrypt from 'bcryptjs'; 
@@ -9,7 +8,7 @@ export const POST = async (req) => {
   const { username, email, password, validatePassword } = await req.json();
   
   try {
-    connectToDB()
+    await connectToDB()
 
     if( !username || !email || !password || !validatePassword ) {
       return NextResponse.json({ message: "Please all fields required"}, { status: 500 });
